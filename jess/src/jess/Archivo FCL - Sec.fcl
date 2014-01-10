@@ -1,0 +1,298 @@
+// Block definition (there may be more than one block per file)
+FUNCTION_BLOCK tipper
+
+// Define input variables
+VAR_INPUT
+    H_sociales : REAL;
+    responsabilidad : REAL;
+    H_tecnicas: REAL; 
+    amabilidad : REAL;
+END_VAR
+
+// Define output variable
+VAR_OUTPUT
+    perfil : REAL;
+END_VAR
+
+// Fuzzify input variable H_social
+FUZZIFY H_sociales
+    TERM baja := (0, 1) (3.48, 0) ;  
+    TERM media := (2.9, 0) (4.88,1) (7.45,0) ;
+    TERM alta := (6.55, 0) (9.9, 1);
+END_FUZZIFY
+
+// Fuzzify input variable responsabilidad
+FUZZIFY responsabilidad
+    TERM baja := (0, 1) (3.84, 0) ;
+    TERM media := (2.9,0) (5.07,1) (7.66,0);
+   TERM alta := (6.91,0) (10,1);
+END_FUZZIFY
+
+// Fuzzify input variable Amabiliadad
+FUZZIFY amabilidad
+    TERM baja := (0, 1) (4.40, 0) ;
+    TERM media := (3.45,0) (5.31,1) (7.16,0);
+   TERM alta := (6.91,0) (10,1);
+END_FUZZIFY
+
+// Fuzzify input variable H_tecnicas
+FUZZIFY H_tecnicas
+    TERM baja := (0, 1) (4, 0) ;
+    TERM media := (3.48,0) (5.38,1) (7.34,0);
+   TERM alta := (6.23,0) (10,1);
+END_FUZZIFY
+
+// Defzzzify output variable Perfil
+DEFUZZIFY perfil
+    TERM regular := (0,1) (4.7,0);
+    TERM aceptable := (4.036,0) (5.106,1) (6.97,0);
+    TERM muy_bueno := (6,0) (10,1);
+    // Use 'Center Of Gravity' defuzzification method
+    METHOD : COG;
+    // Default value is 0 (if no rule activates defuzzifier)
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+RULEBLOCK No1
+    // Use 'min' for 'and' (also implicit use 'max'
+    // for 'or' to fulfill DeMorgan's Law)
+    AND : MIN;
+    // Use 'min' activation method
+    ACT : MIN;
+    // Use 'max' accumulation method
+    ACCU : MAX;
+
+  RULE 1 : If H_sociales IS baja AND responsabilidad IS baja AND amabilidad IS baja AND H_tecnicas IS baja       
+                THEN perfil IS regular;
+
+    RULE 2 : IF H_sociales IS baja AND responsabilidad IS baja AND amabilidad IS baja AND H_tecnicas IS media
+                THEN perfil IS regular;     
+   
+    RULE 3 : IF H_sociales IS baja AND responsabilidad IS baja AND amabilidad IS baja AND H_tecnicas IS alta
+                THEN perfil IS regular; 
+ 
+    RULE 4 : IF H_sociales IS baja AND responsabilidad IS baja AND amabilidad IS media AND H_tecnicas IS baja
+                THEN perfil IS regular;    
+
+    RULE 5 : IF H_sociales IS baja AND responsabilidad IS baja AND amabilidad IS media AND H_tecnicas IS media
+                THEN perfil IS regular;    
+    
+   RULE 6 : IF H_sociales IS baja AND responsabilidad IS baja AND amabilidad IS media AND H_tecnicas IS alta
+                THEN perfil IS regular;   
+
+    RULE 7 : IF H_sociales IS baja AND responsabilidad IS baja AND amabilidad IS alta AND H_tecnicas IS baja
+                THEN perfil IS regular;     
+   
+    RULE 8 : IF H_sociales IS baja AND responsabilidad IS baja AND amabilidad IS alta AND H_tecnicas IS media
+                THEN perfil IS regular; 
+
+    RULE 9 : IF H_sociales IS baja AND responsabilidad IS baja AND amabilidad IS alta AND H_tecnicas IS alta
+                THEN perfil IS aceptable; 
+   
+    RULE 10 : If H_sociales IS baja AND responsabilidad IS media AND amabilidad IS baja AND H_tecnicas IS baja       
+                THEN perfil IS regular;
+   
+    RULE 11 : If H_sociales IS baja AND responsabilidad IS media AND amabilidad IS baja AND H_tecnicas IS media       
+                THEN perfil IS regular;
+   
+    RULE 12 : If H_sociales IS baja AND responsabilidad IS media AND amabilidad IS baja AND H_tecnicas IS alta       
+                THEN perfil IS regular;
+   
+    RULE 13 : If H_sociales IS baja AND responsabilidad IS media AND amabilidad IS media AND H_tecnicas IS baja       
+                THEN perfil IS regular;
+   
+    RULE 14 : If H_sociales IS baja AND responsabilidad IS media AND amabilidad IS media AND H_tecnicas IS media       
+                THEN perfil IS regular;
+   
+    RULE 15 : If H_sociales IS baja AND responsabilidad IS media AND amabilidad IS media AND H_tecnicas IS alta       
+                THEN perfil IS aceptable;
+   
+    RULE 16 : If H_sociales IS baja AND responsabilidad IS alta AND amabilidad IS baja AND H_tecnicas IS baja       
+                THEN perfil IS regular;
+   
+    RULE 17 : If H_sociales IS baja AND responsabilidad IS alta AND amabilidad IS baja AND H_tecnicas IS media       
+                THEN perfil IS regular;
+   
+    RULE 18 : If H_sociales IS baja AND responsabilidad IS alta AND amabilidad IS baja AND H_tecnicas IS alta       
+                THEN perfil IS aceptable;
+   
+    RULE 19 : If H_sociales IS baja AND responsabilidad IS alta AND amabilidad IS media AND H_tecnicas IS baja       
+                THEN perfil IS regular;
+
+    RULE 20 : If H_sociales IS baja AND responsabilidad IS alta AND amabilidad IS media AND H_tecnicas IS media       
+                THEN perfil IS aceptable;
+  
+   RULE 21 : If H_sociales IS baja AND responsabilidad IS alta AND amabilidad IS media AND H_tecnicas IS alta       
+                THEN perfil IS aceptable;
+
+   RULE 22 : If H_sociales IS baja AND responsabilidad IS alta AND amabilidad IS alta AND H_tecnicas IS baja       
+                THEN perfil IS aceptable;
+
+   RULE 23 : If H_sociales IS baja AND responsabilidad IS alta AND amabilidad IS alta AND H_tecnicas IS media       
+                THEN perfil IS aceptable;
+
+   RULE 24 : If H_sociales IS media AND responsabilidad IS baja AND amabilidad IS baja AND H_tecnicas IS baja       
+                THEN perfil IS regular;
+
+   RULE 25 : If H_sociales IS media AND responsabilidad IS baja AND amabilidad IS baja AND H_tecnicas IS media       
+                THEN perfil IS regular;
+
+   RULE 26 : If H_sociales IS media AND responsabilidad IS baja AND amabilidad IS baja AND H_tecnicas IS alta      
+                THEN perfil IS regular;
+
+   RULE 27 : If H_sociales IS media AND responsabilidad IS baja AND amabilidad IS media AND H_tecnicas IS baja       
+                THEN perfil IS regular;
+
+   RULE 28 : If H_sociales IS media AND responsabilidad IS baja AND amabilidad IS media AND H_tecnicas IS media       
+                THEN perfil IS regular;
+
+   RULE 29 : If H_sociales IS media AND responsabilidad IS baja AND amabilidad IS media AND H_tecnicas IS alta       
+                THEN perfil IS aceptable;
+
+   RULE 30 : If H_sociales IS media AND responsabilidad IS baja AND amabilidad IS alta AND H_tecnicas IS baja       
+                THEN perfil IS regular;
+
+   RULE 31 : If H_sociales IS media AND responsabilidad IS baja AND amabilidad IS alta AND H_tecnicas IS media       
+                THEN perfil IS aceptable;
+
+   RULE 32 : If H_sociales IS media AND responsabilidad IS baja AND amabilidad IS alta AND H_tecnicas IS alta       
+                THEN perfil IS aceptable;
+
+   RULE 33 : If H_sociales IS media AND responsabilidad IS media AND amabilidad IS baja AND H_tecnicas IS baja       
+                THEN perfil IS regular;
+
+   RULE 34 : If H_sociales IS media AND responsabilidad IS media AND amabilidad IS baja AND H_tecnicas IS media       
+                THEN perfil IS regular;
+
+   RULE 35 : If H_sociales IS media AND responsabilidad IS media AND amabilidad IS baja AND H_tecnicas IS alta       
+                THEN perfil IS aceptable;
+
+   RULE 36 : If H_sociales IS media AND responsabilidad IS media AND amabilidad IS media  AND H_tecnicas IS baja      
+                THEN perfil IS regular;
+
+   RULE 37 : If H_sociales IS media AND responsabilidad IS media AND amabilidad IS media AND H_tecnicas IS alta       
+                THEN perfil IS aceptable;
+
+   RULE 38 : If H_sociales IS media AND responsabilidad IS media AND amabilidad IS media AND H_tecnicas IS media       
+                THEN perfil IS aceptable;
+
+   RULE 39 : If H_sociales IS media AND responsabilidad IS media AND amabilidad IS alta AND H_tecnicas IS baja       
+                THEN perfil IS aceptable;
+
+RULE 76 : If H_sociales IS alta AND responsabilidad IS alta AND amabilidad IS alta AND H_tecnicas IS alta       
+                THEN perfil IS muy_bueno;
+
+  RULE 75 : If H_sociales IS alta AND responsabilidad IS alta AND amabilidad IS alta AND H_tecnicas IS baja       
+                THEN perfil IS aceptable;
+
+  RULE 74 : If H_sociales IS alta AND responsabilidad IS alta AND amabilidad IS media AND H_tecnicas IS alta       
+                THEN perfil IS muy_bueno;
+
+  RULE 73 : If H_sociales IS alta AND responsabilidad IS alta AND amabilidad IS media AND H_tecnicas IS media       
+                THEN perfil IS aceptable;
+
+  RULE 72 : If H_sociales IS alta AND responsabilidad IS alta AND amabilidad IS media AND H_tecnicas IS baja      
+                THEN perfil IS aceptable;
+
+  RULE 71 : If H_sociales IS alta AND responsabilidad IS alta AND amabilidad IS baja AND H_tecnicas IS alta      
+                THEN perfil IS aceptable;
+
+  RULE 70 : If H_sociales IS alta AND responsabilidad IS alta AND amabilidad IS baja AND H_tecnicas IS media      
+                THEN perfil IS aceptable;
+
+  RULE 69 : If H_sociales IS alta AND responsabilidad IS alta AND amabilidad IS baja AND H_tecnicas IS baja      
+                THEN perfil IS aceptable;
+
+  RULE 68 : If H_sociales IS alta AND responsabilidad IS alta AND amabilidad IS alta AND H_tecnicas IS alta      
+                THEN perfil IS muy_bueno;
+
+  RULE 67 : If H_sociales IS alta AND responsabilidad IS media AND amabilidad IS alta AND H_tecnicas IS media      
+                THEN perfil IS aceptable;
+
+  RULE 66 : If H_sociales IS alta AND responsabilidad IS media AND amabilidad IS alta AND H_tecnicas IS baja     
+                THEN perfil IS aceptable;
+
+  RULE 65 : If H_sociales IS alta AND responsabilidad IS media AND amabilidad IS media AND H_tecnicas IS alta     
+                THEN perfil IS muy_bueno;
+
+  RULE 64 : If H_sociales IS alta AND responsabilidad IS media AND amabilidad IS media AND H_tecnicas IS media     
+                THEN perfil IS aceptable;
+
+  RULE 63 : If H_sociales IS alta AND responsabilidad IS media AND amabilidad IS media AND H_tecnicas IS baja     
+                THEN perfil IS aceptable;
+
+  RULE 62 : If H_sociales IS alta AND responsabilidad IS media AND amabilidad IS baja AND H_tecnicas IS alta     
+                THEN perfil IS aceptable; 
+       
+  RULE 61 : If H_sociales IS alta AND responsabilidad IS media AND amabilidad IS baja AND H_tecnicas IS media     
+                THEN perfil IS regular;
+
+  RULE 60 : If H_sociales IS alta AND responsabilidad IS media AND amabilidad IS baja AND H_tecnicas IS baja     
+                THEN perfil IS regular;
+				
+  RULE 59 : If H_sociales IS alta AND responsabilidad IS baja AND amabilidad IS alta AND H_tecnicas IS alta    
+                THEN perfil IS muy_bueno;
+
+  RULE 58 : If H_sociales IS alta AND responsabilidad IS baja AND amabilidad IS alta AND H_tecnicas IS media    
+                THEN perfil IS aceptable;
+
+  RULE 57 : If H_sociales IS alta AND responsabilidad IS baja AND amabilidad IS alta AND H_tecnicas IS baja    
+                THEN perfil IS aceptable;
+
+  RULE 56 : If H_sociales IS alta AND responsabilidad IS baja AND amabilidad IS media AND H_tecnicas IS alta    
+                THEN perfil IS aceptable;
+
+  RULE 55 : If H_sociales IS alta AND responsabilidad IS baja AND amabilidad IS media AND H_tecnicas IS media    
+                THEN perfil IS aceptable;
+
+  RULE 54 : If H_sociales IS alta AND responsabilidad IS baja AND amabilidad IS media AND H_tecnicas IS baja   
+                THEN perfil IS regular;
+
+  RULE 53 : If H_sociales IS alta AND responsabilidad IS baja AND amabilidad IS baja AND H_tecnicas IS alta   
+                THEN perfil IS aceptable;
+
+  RULE 52 : If H_sociales IS alta AND responsabilidad IS baja AND amabilidad IS baja AND H_tecnicas IS media   
+                THEN perfil IS regular;
+
+  RULE 51 : If H_sociales IS alta AND responsabilidad IS baja AND amabilidad IS baja AND H_tecnicas IS baja   
+                THEN perfil IS regular;
+
+  RULE 50 : If H_sociales IS media AND responsabilidad IS alta AND amabilidad IS alta AND H_tecnicas IS alta   
+                THEN perfil IS muy_bueno;
+
+  RULE 49 : If H_sociales IS media AND responsabilidad IS alta AND amabilidad IS alta AND H_tecnicas IS media   
+                THEN perfil IS aceptable;
+
+  RULE 48 : If H_sociales IS media AND responsabilidad IS alta AND amabilidad IS alta AND H_tecnicas IS baja   
+                THEN perfil IS aceptable;
+
+  RULE 47 : If H_sociales IS media AND responsabilidad IS alta AND amabilidad IS media AND H_tecnicas IS alta  
+                THEN perfil IS muy_bueno;
+
+  RULE 46 : If H_sociales IS media AND responsabilidad IS alta AND amabilidad IS media AND H_tecnicas IS media  
+                THEN perfil IS aceptable;
+
+  RULE 45 : If H_sociales IS media AND responsabilidad IS alta AND amabilidad IS media AND H_tecnicas IS baja  
+                THEN perfil IS regular;
+
+  RULE 44 : If H_sociales IS media AND responsabilidad IS alta AND amabilidad IS baja AND H_tecnicas IS alta  
+                THEN perfil IS aceptable;
+
+  RULE 43 : If H_sociales IS media AND responsabilidad IS alta AND amabilidad IS baja AND H_tecnicas IS media  
+                THEN perfil IS regular;
+
+  RULE 42 : If H_sociales IS media AND responsabilidad IS alta AND amabilidad IS baja AND H_tecnicas IS baja  
+                THEN perfil IS regular;
+
+  RULE 42 : If H_sociales IS media AND responsabilidad IS alta AND amabilidad IS baja AND H_tecnicas IS baja 
+                THEN perfil IS regular;
+
+  RULE 41 : If H_sociales IS media AND responsabilidad IS media AND amabilidad IS alta AND H_tecnicas IS alta 
+                THEN perfil IS muy_bueno;
+
+  RULE 40 : If H_sociales IS media AND responsabilidad IS media AND amabilidad IS alta AND H_tecnicas IS media 
+                THEN perfil IS aceptable;
+
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

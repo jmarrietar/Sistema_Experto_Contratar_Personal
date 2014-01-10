@@ -1,0 +1,230 @@
+// Block definition (there may be more than one block per file)
+FUNCTION_BLOCK tipper
+
+// Define input variables
+VAR_INPUT
+    paciencia : REAL;
+    imparcialidad : REAL;
+    H_sociales : REAL; 
+    responsabilidad : REAL;
+END_VAR
+
+// Define output variable
+VAR_OUTPUT
+    perfil : REAL;
+END_VAR
+
+// Fuzzify input variable paciencia
+FUZZIFY paciencia
+    TERM baja := (0, 1) (4, 0) ;  
+    TERM media := (1, 0) (5,1) (9,0) ;
+    TERM alta := (6, 0) (10, 1);
+END_FUZZIFY
+
+// Fuzzify input variable imparcialidad
+FUZZIFY imparcialidad
+    TERM baja := (0, 1) (4, 0) ;  
+    TERM media := (1, 0) (5,1) (9,0) ;
+    TERM alta := (6, 0) (10, 1);
+END_FUZZIFY
+
+// Fuzzify input variable H_social
+FUZZIFY H_sociales
+    TERM baja := (0, 1) (3.48, 0) ;  
+    TERM media := (2.9, 0) (4.88,1) (7.45,0) ;
+    TERM alta := (6.55, 0) (9.9, 1);
+END_FUZZIFY
+
+// Fuzzify input variable responsabilidad
+FUZZIFY responsabilidad
+    TERM baja := (0, 1) (3.84, 0) ;
+    TERM media := (2.9,0) (5.07,1) (7.66,0);
+   TERM alta := (6.91,0) (10,1);
+END_FUZZIFY
+
+// Defzzzify output variable Perfil
+DEFUZZIFY perfil
+    TERM regular := (0,1) (4.7,0);
+    TERM aceptable := (4.036,0) (5.106,1) (6.97,0);
+    TERM muy_bueno := (6,0) (10,1);
+    // Use 'Center Of Gravity' defuzzification method
+    METHOD : COG;
+    // Default value is 0 (if no rule activates defuzzifier)
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+RULEBLOCK No1
+    // Use 'min' for 'and' (also implicit use 'max'
+    // for 'or' to fulfill DeMorgan's Law)
+    AND : MIN;
+    // Use 'min' activation method
+    ACT : MIN;
+    // Use 'max' accumulation method
+    ACCU : MAX;
+
+RULE 1 : If paciencia IS baja AND imparcialidad IS baja AND H_sociales IS baja AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 2 : If paciencia IS baja AND imparcialidad IS baja AND H_sociales IS baja AND responsabilidad IS media       
+                THEN perfil IS regular;
+RULE 3 : If paciencia IS baja AND imparcialidad IS baja AND H_sociales IS baja AND responsabilidad IS alta       
+                THEN perfil IS regular;
+RULE 4 : If paciencia IS baja AND imparcialidad IS baja AND H_sociales IS media AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 5 : If paciencia IS baja AND imparcialidad IS baja AND H_sociales IS media AND responsabilidad IS media       
+                THEN perfil IS regular;
+RULE 6 : If paciencia IS baja AND imparcialidad IS baja AND H_sociales IS media AND responsabilidad IS alta       
+                THEN perfil IS regular;
+RULE 7 : If paciencia IS baja AND imparcialidad IS baja AND H_sociales IS alta AND responsabilidad IS media       
+                THEN perfil IS regular;
+RULE 8 : If paciencia IS baja AND imparcialidad IS baja AND H_sociales IS alta AND responsabilidad IS media       
+                THEN perfil IS regular;
+RULE 9 : If paciencia IS baja AND imparcialidad IS baja AND H_sociales IS alta AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 10 : If paciencia IS baja AND imparcialidad IS media AND H_sociales IS baja AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 11 : If paciencia IS baja AND imparcialidad IS media AND H_sociales IS baja AND responsabilidad IS media       
+                THEN perfil IS regular;
+RULE 12 : If paciencia IS baja AND imparcialidad IS media AND H_sociales IS baja AND responsabilidad IS alta       
+                THEN perfil IS regular;
+RULE 13 : If paciencia IS baja AND imparcialidad IS media AND H_sociales IS media AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 14 : If paciencia IS baja AND imparcialidad IS media AND H_sociales IS media AND responsabilidad IS media       
+                THEN perfil IS regular;
+RULE 15 : If paciencia IS baja AND imparcialidad IS media AND H_sociales IS media AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 16 : If paciencia IS baja AND imparcialidad IS media AND H_sociales IS alta AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 17 : If paciencia IS baja AND imparcialidad IS media AND H_sociales IS alta AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 18 : If paciencia IS baja AND imparcialidad IS media AND H_sociales IS alta AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 19 : If paciencia IS baja AND imparcialidad IS alta AND H_sociales IS baja AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 20 : If paciencia IS baja AND imparcialidad IS alta AND H_sociales IS baja AND responsabilidad IS media       
+                THEN perfil IS regular;
+RULE 21 : If paciencia IS baja AND imparcialidad IS alta AND H_sociales IS baja AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 22 : If paciencia IS baja AND imparcialidad IS alta AND H_sociales IS media AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 23 : If paciencia IS baja AND imparcialidad IS alta AND H_sociales IS media AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 24 : If paciencia IS baja AND imparcialidad IS alta AND H_sociales IS media AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 25 : If paciencia IS baja AND imparcialidad IS alta AND H_sociales IS alta AND responsabilidad IS baja       
+                THEN perfil IS aceptable;
+RULE 26 : If paciencia IS baja AND imparcialidad IS alta AND H_sociales IS alta AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 27 : If paciencia IS baja AND imparcialidad IS alta AND H_sociales IS alta AND responsabilidad IS alta       
+                THEN perfil IS muy_bueno;
+RULE 28 : If paciencia IS media AND imparcialidad IS baja AND H_sociales IS baja AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 29 : If paciencia IS media AND imparcialidad IS baja AND H_sociales IS baja AND responsabilidad IS alta       
+                THEN perfil IS regular;
+RULE 30 : If paciencia IS media AND imparcialidad IS baja AND H_sociales IS baja AND responsabilidad IS alta       
+                THEN perfil IS regular;
+RULE 31 : If paciencia IS media AND imparcialidad IS baja AND H_sociales IS media AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 32 : If paciencia IS media AND imparcialidad IS baja AND H_sociales IS media AND responsabilidad IS media       
+                THEN perfil IS regular;
+RULE 33 : If paciencia IS media AND imparcialidad IS baja AND H_sociales IS media AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 34 : If paciencia IS media AND imparcialidad IS baja AND H_sociales IS alta AND responsabilidad IS media       
+                THEN perfil IS regular;
+RULE 35 : If paciencia IS media AND imparcialidad IS baja AND H_sociales IS alta AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 36 : If paciencia IS media AND imparcialidad IS baja AND H_sociales IS alta AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 37 : If paciencia IS media AND imparcialidad IS media AND H_sociales IS baja AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 38 : If paciencia IS media AND imparcialidad IS media AND H_sociales IS baja AND responsabilidad IS media      
+                THEN perfil IS regular;
+RULE 39 : If paciencia IS media AND imparcialidad IS media AND H_sociales IS baja AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 40 : If paciencia IS media AND imparcialidad IS media AND H_sociales IS media AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 41 : If paciencia IS media AND imparcialidad IS media AND H_sociales IS media AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 42 : If paciencia IS media AND imparcialidad IS media AND H_sociales IS media AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 43 : If paciencia IS media AND imparcialidad IS media AND H_sociales IS alta AND responsabilidad IS baja       
+                THEN perfil IS aceptable;
+RULE 44 : If paciencia IS media AND imparcialidad IS media AND H_sociales IS alta AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 45 : If paciencia IS media AND imparcialidad IS media AND H_sociales IS alta AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 46 : If paciencia IS media AND imparcialidad IS alta AND H_sociales IS baja AND responsabilidad IS baja       
+                THEN perfil IS aceptable;
+RULE 47 : If paciencia IS media AND imparcialidad IS alta AND H_sociales IS baja AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 48 : If paciencia IS media AND imparcialidad IS alta AND H_sociales IS baja AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 49 : If paciencia IS media AND imparcialidad IS alta AND H_sociales IS media AND responsabilidad IS baja       
+                THEN perfil IS aceptable;
+RULE 50 : If paciencia IS media AND imparcialidad IS alta AND H_sociales IS media AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 51 : If paciencia IS baja AND imparcialidad IS baja AND H_sociales IS baja AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 52 : If paciencia IS media AND imparcialidad IS alta AND H_sociales IS media AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 53 : If paciencia IS media AND imparcialidad IS alta AND H_sociales IS alta AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 54 : If paciencia IS media AND imparcialidad IS alta AND H_sociales IS alta AND responsabilidad IS alta       
+                THEN perfil IS muy_bueno;
+RULE 55 : If paciencia IS alta AND imparcialidad IS baja AND H_sociales IS baja AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 56 : If paciencia IS alta AND imparcialidad IS baja AND H_sociales IS baja AND responsabilidad IS media       
+                THEN perfil IS regular;
+RULE 57 : If paciencia IS alta AND imparcialidad IS baja AND H_sociales IS baja AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 58 : If paciencia IS alta AND imparcialidad IS baja AND H_sociales IS media AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 59 : If paciencia IS alta AND imparcialidad IS baja AND H_sociales IS media AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 60 : If paciencia IS alta AND imparcialidad IS baja AND H_sociales IS media AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 61 : If paciencia IS alta AND imparcialidad IS baja AND H_sociales IS alta AND responsabilidad IS baja       
+                THEN perfil IS aceptable;
+RULE 62 : If paciencia IS alta AND imparcialidad IS baja AND H_sociales IS alta AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 63 : If paciencia IS alta AND imparcialidad IS baja AND H_sociales IS alta AND responsabilidad IS alta       
+                THEN perfil IS muy_bueno;
+RULE 64 : If paciencia IS alta AND imparcialidad IS media AND H_sociales IS baja AND responsabilidad IS baja       
+                THEN perfil IS regular;
+RULE 65 : If paciencia IS alta AND imparcialidad IS media AND H_sociales IS baja AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 66 : If paciencia IS alta AND imparcialidad IS media AND H_sociales IS baja AND responsabilidad IS alta       
+                THEN perfil IS aceptable;
+RULE 67 : If paciencia IS alta AND imparcialidad IS media AND H_sociales IS media AND responsabilidad IS baja       
+                THEN perfil IS aceptable;
+RULE 68 : If paciencia IS alta AND imparcialidad IS media AND H_sociales IS media AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 69 : If paciencia IS alta AND imparcialidad IS media AND H_sociales IS media AND responsabilidad IS alta       
+                THEN perfil IS muy_bueno;
+RULE 70 : If paciencia IS alta AND imparcialidad IS media AND H_sociales IS alta AND responsabilidad IS baja       
+                THEN perfil IS aceptable;
+RULE 71 : If paciencia IS alta AND imparcialidad IS media AND H_sociales IS alta AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 72 : If paciencia IS alta AND imparcialidad IS media AND H_sociales IS alta AND responsabilidad IS alta       
+                THEN perfil IS muy_bueno;
+RULE 73 : If paciencia IS alta AND imparcialidad IS alta AND H_sociales IS baja AND responsabilidad IS baja       
+                THEN perfil IS aceptable;
+RULE 74 : If paciencia IS alta AND imparcialidad IS alta AND H_sociales IS baja AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 75 : If paciencia IS alta AND imparcialidad IS alta AND H_sociales IS baja AND responsabilidad IS alta       
+                THEN perfil IS muy_bueno;
+RULE 76 : If paciencia IS alta AND imparcialidad IS alta AND H_sociales IS media AND responsabilidad IS baja       
+                THEN perfil IS aceptable;
+RULE 77 : If paciencia IS alta AND imparcialidad IS alta AND H_sociales IS media AND responsabilidad IS media       
+                THEN perfil IS aceptable;
+RULE 78 : If paciencia IS alta AND imparcialidad IS alta AND H_sociales IS media AND responsabilidad IS alta       
+                THEN perfil IS muy_bueno;
+RULE 79 : If paciencia IS alta AND imparcialidad IS alta AND H_sociales IS alta AND responsabilidad IS baja       
+                THEN perfil IS muy_bueno;
+RULE 80 : If paciencia IS alta AND imparcialidad IS alta AND H_sociales IS alta AND responsabilidad IS media       
+                THEN perfil IS muy_bueno;
+RULE 81 : If paciencia IS alta AND imparcialidad IS alta AND H_sociales IS alta AND responsabilidad IS alta       
+                THEN perfil IS muy_bueno;
+
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
